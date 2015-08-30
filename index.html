@@ -26,7 +26,8 @@
 			var currencies;
 			var countries = [];
 			$(document).ready(function (){
-				$.get("http:/crossorigin.me/https://api.bitfinex.com/v1/pubticker/btcusd", getBTCUSD);
+				//$.get("http:/crossorigin.me/https://api.bitfinex.com/v1/pubticker/btcusd", getBTCUSD);
+				$.get("https://api.bitfinex.com/v1/pubticker/btcusd", getBTCUSD);
 				$.get("http://api.fixer.io/latest?base=USD", processValidCurrencies);
 			});
 

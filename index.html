@@ -1,0 +1,39 @@
+<head>
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<link rel="stylesheet" href="css/bootstrap-theme.min.css">
+	<script src="js/jquery-2.1.3.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+</head>
+
+<body>
+	<div class="col-lg-12">
+		<h2 align="center"> Remit With Bitcoin (Assume $100 USD) </h2>
+	</div>
+	<div class="col-lg-12">
+		<table class="table" id="master-table">
+			<tr>
+				<th>Name</th>
+				<th>Region</th>
+				<th>Local Currency</th>
+				<th>WU Percentage Cost</th>
+				<th>Bitcoin Percentage Cost</th>
+				<th>Exchange</th>
+			</tr>
+		</table>
+	</div>
+	<script type="text/javascript">
+		$(document).ready(function (){
+			$.get("http://crossorigin.me/https://restcountries.eu/rest/v1/all", processCountries);
+		});
+
+		function processCountries(data)
+		{
+			obj = JSON.parse(data);
+			value = $("#master-table").html();
+			$.each(obj, function(i, country){
+				value += "<tr><td>"+country.name+"</td><td>"+country.region+"</td><td>"+country.currencies[0]+"</td><tr>";
+			});
+			$("#master-table").html(value);
+		}
+	</script>
+</body>

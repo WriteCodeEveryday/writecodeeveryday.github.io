@@ -343,10 +343,7 @@ biteasy.onmessage = function(msg) {
 biteasy.onopen = function()
 {
   biteasy.send(JSON.stringify({
-    "event": "transactions:create",
-    "filters": {
-        "confidence": "UNCONFIRMED"
-    }
+    "event": "transactions:create"
   }))
 }
 

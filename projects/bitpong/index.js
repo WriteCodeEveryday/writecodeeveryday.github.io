@@ -11,6 +11,9 @@ canvas.width = width;
 canvas.height = height;
 var context = canvas.getContext('2d');
 
+var img=new Image();
+img.src="https://bitcoin.org/img/icons/opengraph.png";
+
 var bitfinex_price = 0;
 var bitfinex_volume = 0;
 var bitstamp_price = 0;
@@ -83,16 +86,11 @@ function Ball(x, y, price, amount, api) {
 }
 
 Ball.prototype.render = function() {
-  context.beginPath();
-  context.fillStyle = "#309793";
-  context.arc(this.x, this.y, this.radius * Math.log(1 + this.amount), 2 * Math.PI, false);
-  context.fill();
-  context.closePath();
+  context.drawImage(img, this.x, this.y, 20 * Math.log(1 + this.amount), 20 * Math.log(1 + this.amount));
 
+  context.fillStyle = "#309793";
   context.font="12px Georgia";
-  var golden_ratio = (this.radius * Math.log(1 + this.amount) * 1.5)
-  var golden_ratiox = (this.radius * Math.log(1 + this.amount) * 0.5)
-  context.fillText(this.amount + "BTC (" + this.api + ")",this.x - golden_ratiox, this.y - golden_ratio);
+  context.fillText(this.amount + "BTC (" + this.api + ")",this.x , this.y );
 };
 
 Ball.prototype.update = function(paddle) {

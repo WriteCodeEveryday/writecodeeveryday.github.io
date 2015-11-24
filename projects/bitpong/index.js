@@ -66,7 +66,8 @@ Computer.prototype.update = function(ball)
 {
   if (ball != null)
   {
-    this.paddle.y = this.paddle.y + 0.5 * (ball.y - 50 - this.paddle.y)
+    var amount = (20 * Math.log(1 + ball.amount))
+    this.paddle.y = this.paddle.y + 0.5 * (ball.y + amount - 50 - this.paddle.y)
   }
 }
 
@@ -102,10 +103,11 @@ Ball.prototype.update = function(paddle) {
     missed_transactions++;
   }
 
-  var top_x = this.x - 5;
-  var top_y = this.y - 5;
-  var bottom_x = this.x + 5;
-  var bottom_y = this.y + 5;
+  var size = (20 * Math.log(1 + this.amount) ) / 2
+  var top_x = this.x - size;
+  var top_y = this.y - size;
+  var bottom_x = this.x + size;
+  var bottom_y = this.y + size;
 
   if(this.y - 5 < 0) { // hitting the bottom wall
     this.y = 5;

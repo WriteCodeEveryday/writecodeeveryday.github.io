@@ -26,7 +26,7 @@ var nodes = [
   { x:   width/3, y: height/2 },
   { x: 2*width/3, y: height/2 }
 ];*/
-
+var force = -400;
 var nodes = [];
 
 // The `links` array contains objects with a `source` and a `target`
@@ -44,13 +44,37 @@ var svg = d3.select('body').append('svg')
   .attr('width', width)
   .attr('height', height);
 
-var zoom = d3.behavior.zoom()
+var legendX = 0;
+var legendY = (9*height)/10;
+
+var legend_text = svg.append('text').text("Legend").style("font-size", "18px").style('fill', '#0a5e96').attr("x", legendX).attr("y",legendY);
+legendY += height/40;
+var legend_input_nodes = svg.append('text').text("Input Nodes").style("font-size", "14px").style('fill', '#F64F53').attr("x", legendX).attr("y",legendY);
+legendY += height/40;
+var legend_output_nodes = svg.append('text').text("Output Nodes").style("font-size", "14px").style('fill', '#309793').attr("x", legendX).attr("y",legendY);
+legendY += height/40;
+var legend_dual_nodes = svg.append('text').text("Input/Output Nodes").style("font-size", "14px").style('fill', '#ffdd00').attr("x", legendX).attr("y",legendY);
+
+legendX = 0;
+legendY = height/30;
+var stats = svg.append('text').text("Stats").style("font-size", "18px").style('fill', '#0a5e96').attr("x", legendX).attr("y",legendY);
+legendY += height/40;
+var nodes_text = svg.append('text').style("font-size", "14px").style('fill', '#0a5e96').attr("x", legendX).attr("y",legendY);
+legendY += height/40;
+var links_text = svg.append('text').style("font-size", "14px").style('fill', '#0a5e96').attr("x", legendX).attr("y",legendY);
+legendY += height/40;
+var largest_transaction_id = svg.append('text').style("font-size", "14px").style('fill', '#0a5e96').attr("x", legendX).attr("y",legendY);
+var largest_transaction_amount = 0;
+
+
+var zoom = d3.behavior.zoom();
+svg.call(zoom);
 
 var force = d3.layout.force()
   .size([width, height])
   .nodes(nodes)
   .links(links)
-  .charge(-20)
+  .charge(force)
   .on("tick", tick);;
 
 force.linkDistance(width/nodes.length);
@@ -89,9 +113,7 @@ function existOrCreate(address1, address2, value1, value2)
     if (nodes[i].id === address1) {
       address1index = i;
     }
-  }
 
-  for (var i = 0; i < nodes.length; i++) {
     if (nodes[i].id === address2) {
       address2index = i;
     }
@@ -100,13 +122,28 @@ function existOrCreate(address1, address2, value1, value2)
   if (address1index == -1)
   {
     address1index = nodes.length;
-    nodes.push({id: address1, value: value1, x: Math.random() * width, y: Math.random() * height, type: "input"});
+
+    nodes.push({id: address1, value: value1, x: Math.random()*width, y: Math.random()*height, type: "input"});
+  }
+  else
+  {
+    if (nodes[address1index].type != "input")
+    {
+      nodes[address1index].type = "input_output";
+    }
   }
 
   if (address2index == -1)
   {
     address2index = nodes.length;
-    nodes.push({id: address2, value: value2, x: Math.random() * width, y: Math.random() * height, type: "output"});
+    nodes.push({id: address2, value: value2,x: Math.random()*width, y: Math.random()*height, type: "output"});
+  }
+   else
+  {
+    if (nodes[address2index].type != "output")
+    {
+      nodes[address2index].type = "input_output";
+    }
   }
 
   links.push({ source: nodes[address1index], target: nodes[address2index] });
@@ -115,29 +152,45 @@ function existOrCreate(address1, address2, value1, value2)
 function updateGraph(data)
 {
   var ins = data.x.inputs
+  var out = data.x.out
+  var totalAmount = 0;
   for (input of ins) {
-    var out = data.x.out
+    totalAmount += input.prev_out.value;
     for (output of out) {
       existOrCreate(input.prev_out.addr, output.addr, input.prev_out.value, output.value);
     }
   }
+  nodes_text.text("NODES: " + nodes.length);
+  links_text.text("LINKS: " + links.length);
+  if (largest_transaction_amount < totalAmount)
+  {
+    largest_transaction_amount = totalAmount;
+    largest_transaction_id.text("LARGEST TRANSACTION: " + (largest_transaction_amount/ 100000000).toFixed(8) + " BTC [" + data.x.hash + "]");
+    console.log(data.x.hash);
+  }
+  paintGraph();
 }
 
 function paintGraph()
 {
+  width = window.innerWidth
+  height = window.innerHeight;
+  svg.attr('width', width).attr('height', height);
+  force.size([width, height]);
+  force.stop();
+    
   link = link.data(force.links(), function(d) { return d.source.id + "-" + d.target.id; });
   link.enter().insert("line", ".node").attr("class", "link");
   link.exit().remove();
 
   node = node.data(force.nodes(), function(d) { return d.id;});
-  node.enter().append("circle").attr("class", function(d) { return "node " + d.type; }).attr("r", 5);
+  node.enter().append("circle").attr("class", function(d) { return "node " + d.type; }).attr("r", 1);
   node.exit().remove();
 
+  force.charge(force/Math.log(nodes.length));
+  zoom.scale(1/nodes.length);
   force.start();
-  zoom.scale(nodes.length);
 }
-
-setInterval(paintGraph, 1000/30);
 
 //Blockchain.info
 var blockchain = new WebSocket("wss://ws.blockchain.info/inv");

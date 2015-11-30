@@ -41,10 +41,11 @@ var links = [
 var links = [];
 
 
-var force_strength = -100;
+var original_force =  -150;
+var force_strength = original_force;
 var svg = d3.select('body').append('svg')
           .attr('width', width)
-          .attr('height', height);
+          .attr('height', height).attr('style', 'background: white');
 
 var legendX = 0;
 var legendY = (9*height)/10;
@@ -178,10 +179,37 @@ function updateGraph(data)
 
 function paintGraph()
 {
-  width = window.innerWidth;
-  height = window.innerHeight;
+  var time_in_seconds = (Date.now() - start)/1000;
+  time_since_start.text("TIME: " + time_in_seconds + " seconds");
+  force_text.text("FORCE:  " + force_strength);
+
+  if (time_in_seconds > 100)
+  {
+    width = window.innerWidth * 5;
+    height = window.innerHeight * 5;
+    force_strength = original_force * 3;
+  }
+  else
+  {
+    width = window.innerWidth;
+    height = window.innerHeight;
+  }
   svg.attr('width', width).attr('height',height);
   force.size([width, height]);
+
+  legendX = 0;
+  legendY = (9*height)/10;
+  
+  legend_text.attr("x", legendX).attr("y",legendY);
+  legendY += height/40;
+  legend_input_nodes.attr("x", legendX).attr("y",legendY);
+  legendY += height/40;
+  legend_output_nodes.attr("x", legendX).attr("y",legendY);
+  legendY += height/40;
+  legend_dual_nodes.attr("x", legendX).attr("y",legendY);
+
+
+
   force.stop();
 
   link = link.data(force.links(), function(d) { return d.source.id + "-" + d.target.id; });
@@ -189,18 +217,28 @@ function paintGraph()
   link.exit().remove();
 
   node = node.data(force.nodes(), function(d) { return d.id;});
-  node.enter().append("circle").attr("class", function(d) { return "node " + d.type; }).attr("r", 1);
+  node.enter().append("circle").attr("class", function(d) { return "node " + d.type; }).attr("r", 5/Math.log(nodes.length));
   node.exit().remove();
 
   force.charge(force_strength/Math.log(nodes.length));
   zoom.scale(1/nodes.length);
   force.start();
 
-  var time_in_seconds = (Date.now() - start)/1000;
-  time_since_start.text("TIME: " + time_in_seconds + " seconds");
-  force_text.text("FORCE:  " + force_strength);
-  if (time_in_seconds > 300)
+  if (time_in_seconds > 120)
   {
+    stats.remove();
+    nodes_text.remove();
+    links_text.remove();
+    force_text.remove();
+    time_since_start.remove();
+    largest_transaction_id.remove();
+
+    Pablo(".input").attr("fill", "#F64F53");
+    Pablo(".output").attr("fill", "#309793");
+    Pablo(".input_output").attr("fill", "#ffdd00");
+    Pablo(".link").attr("stroke", "#0a5e96").attr("stroke-width", "1px");
+    //Pablo(".hl").attr("font-family", "Lovelo Line Bold");
+    //Pablo(".hl1").attr("font-family", "Lovelo Line Light");
     Pablo("svg").download('png', 'graph'+Date.now()+'.png')
     location.reload();
   }

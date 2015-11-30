@@ -2,6 +2,7 @@
 // a size that's convenient for displaying the graphic on
 // http://jsDataV.is
 
+var start = Date.now();
 var width = window.innerWidth,
   height = window.innerHeight;
 
@@ -26,7 +27,7 @@ var nodes = [
   { x:   width/3, y: height/2 },
   { x: 2*width/3, y: height/2 }
 ];*/
-var force = -400;
+
 var nodes = [];
 
 // The `links` array contains objects with a `source` and a `target`
@@ -40,6 +41,7 @@ var links = [
 var links = [];
 
 
+var force_strength = -100;
 var svg = d3.select('body').append('svg')
   .attr('width', width)
   .attr('height', height);
@@ -63,6 +65,10 @@ var nodes_text = svg.append('text').style("font-size", "14px").style('fill', '#0
 legendY += height/40;
 var links_text = svg.append('text').style("font-size", "14px").style('fill', '#0a5e96').attr("x", legendX).attr("y",legendY);
 legendY += height/40;
+var force_text = svg.append('text').style("font-size", "14px").style('fill', '#0a5e96').attr("x", legendX).attr("y",legendY);
+legendY += height/40;
+var time_since_start = svg.append('text').style("font-size", "14px").style('fill', '#0a5e96').attr("x", legendX).attr("y",legendY);
+legendY += height/40;
 var largest_transaction_id = svg.append('text').style("font-size", "14px").style('fill', '#0a5e96').attr("x", legendX).attr("y",legendY);
 var largest_transaction_amount = 0;
 
@@ -74,7 +80,7 @@ var force = d3.layout.force()
   .size([width, height])
   .nodes(nodes)
   .links(links)
-  .charge(force)
+  .charge(force_strength)
   .on("tick", tick);;
 
 force.linkDistance(width/nodes.length);
@@ -175,7 +181,7 @@ function paintGraph()
 {
   width = window.innerWidth
   height = window.innerHeight;
-  svg.attr('width', width).attr('height', height);
+  svg.attr('width', width).attr('height',height);
   force.size([width, height]);
   force.stop();
     
@@ -187,9 +193,12 @@ function paintGraph()
   node.enter().append("circle").attr("class", function(d) { return "node " + d.type; }).attr("r", 1);
   node.exit().remove();
 
-  force.charge(force/Math.log(nodes.length));
+  force.charge(force_strength/Math.log(nodes.length));
   zoom.scale(1/nodes.length);
   force.start();
+
+  time_since_start.text("TIME: " + (Date.now() - start)/1000 + " seconds");
+  force_text.text("FORCE:  " + force_strength);
 }
 
 //Blockchain.info

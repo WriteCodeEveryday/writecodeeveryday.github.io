@@ -41,6 +41,8 @@ var links = [
 var links = [];
 
 
+var paint_enabled = true;
+var screenshot_seconds = 120;
 var original_force =  -150;
 var force_strength = original_force;
 var svg = d3.select('body').append('svg')
@@ -169,25 +171,50 @@ function updateGraph(data)
   }
   nodes_text.text("NODES: " + nodes.length);
   links_text.text("LINKS: " + links.length);
+  var time_in_seconds = (Date.now() - start)/1000;
+  time_since_start.text("TIME: " + time_in_seconds + " seconds");
+  force_text.text("FORCE:  " + force_strength);
+
   if (largest_transaction_amount < totalAmount)
   {
     largest_transaction_amount = totalAmount;
     largest_transaction_id.text("LARGEST TRANSACTION: " + (largest_transaction_amount/ 100000000).toFixed(8) + " BTC [" + data.x.hash + "]");
   }
-  paintGraph();
+
+  if (paint_enabled)
+  {
+    paintGraph();
+  }
+
+  if (time_in_seconds > screenshot_seconds)
+  {
+    stats.remove();
+    nodes_text.remove();
+    links_text.remove();
+    force_text.remove();
+    time_since_start.remove();
+    largest_transaction_id.remove();
+
+    Pablo(".input").attr("fill", "#F64F53");
+    Pablo(".output").attr("fill", "#309793");
+    Pablo(".input_output").attr("fill", "#ffdd00");
+    Pablo(".link").attr("stroke", "#0a5e96").attr("stroke-width", "1px");
+    //Pablo(".hl").attr("font-family", "Lovelo Line Bold");
+    //Pablo(".hl1").attr("font-family", "Lovelo Line Light");
+    Pablo("svg").download('png', 'graph'+Date.now()+'.png')
+    location.reload();
+  }
 }
 
 function paintGraph()
 {
   var time_in_seconds = (Date.now() - start)/1000;
-  time_since_start.text("TIME: " + time_in_seconds + " seconds");
-  force_text.text("FORCE:  " + force_strength);
-
-  if (time_in_seconds > 100)
+  if (time_in_seconds > (screenshot_seconds - 10))
   {
-    width = window.innerWidth * 5;
-    height = window.innerHeight * 5;
+    width = window.innerWidth * 4;
+    height = window.innerHeight * 4;
     force_strength = original_force * 3;
+    paint_enabled = false;
   }
   else
   {
@@ -208,10 +235,7 @@ function paintGraph()
   legendY += height/40;
   legend_dual_nodes.attr("x", legendX).attr("y",legendY);
 
-
-
   force.stop();
-
   link = link.data(force.links(), function(d) { return d.source.id + "-" + d.target.id; });
   link.enter().insert("line", ".node").attr("class", "link");
   link.exit().remove();
@@ -223,25 +247,6 @@ function paintGraph()
   force.charge(force_strength/Math.log(nodes.length));
   zoom.scale(1/nodes.length);
   force.start();
-
-  if (time_in_seconds > 120)
-  {
-    stats.remove();
-    nodes_text.remove();
-    links_text.remove();
-    force_text.remove();
-    time_since_start.remove();
-    largest_transaction_id.remove();
-
-    Pablo(".input").attr("fill", "#F64F53");
-    Pablo(".output").attr("fill", "#309793");
-    Pablo(".input_output").attr("fill", "#ffdd00");
-    Pablo(".link").attr("stroke", "#0a5e96").attr("stroke-width", "1px");
-    //Pablo(".hl").attr("font-family", "Lovelo Line Bold");
-    //Pablo(".hl1").attr("font-family", "Lovelo Line Light");
-    Pablo("svg").download('png', 'graph'+Date.now()+'.png')
-    location.reload();
-  }
 }
 
 //Blockchain.info

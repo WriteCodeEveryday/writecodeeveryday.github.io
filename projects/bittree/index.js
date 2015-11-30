@@ -172,7 +172,6 @@ function updateGraph(data)
   {
     largest_transaction_amount = totalAmount;
     largest_transaction_id.text("LARGEST TRANSACTION: " + (largest_transaction_amount/ 100000000).toFixed(8) + " BTC [" + data.x.hash + "]");
-    console.log(data.x.hash);
   }
   paintGraph();
 }
@@ -197,8 +196,14 @@ function paintGraph()
   zoom.scale(1/nodes.length);
   force.start();
 
-  time_since_start.text("TIME: " + (Date.now() - start)/1000 + " seconds");
+  var time_in_seconds = (Date.now() - start)/1000;
+  time_since_start.text("TIME: " + time_in_seconds + " seconds");
   force_text.text("FORCE:  " + force_strength);
+  if (time_in_seconds > 300)
+  {
+    Pablo("svg").download('png', 'graph'+Date.now()+'.png')
+    location.reload();
+  }
 }
 
 //Blockchain.info

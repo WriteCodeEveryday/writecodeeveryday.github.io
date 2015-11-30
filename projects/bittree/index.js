@@ -179,7 +179,7 @@ var links = [
       largest_transaction_amount = totalAmount;
       largest_transaction_id.text("LARGEST TRANSACTION: " + (largest_transaction_amount/ 100000000).toFixed(8) + " BTC [" + data.x.hash + "]");
     }
-    
+
     nodes_text.text("NODES: " + nodes.length);
     links_text.text("LINKS: " + links.length);
     var time_in_seconds = (Date.now() - start)/1000;
@@ -187,7 +187,7 @@ var links = [
     force_text.text("FORCE:  " + force_strength);
 
 
-    if (time_in_seconds > screenshot_seconds)
+    if (screenshot_seconds > 0 && time_in_seconds > screenshot_seconds)
     {
       stats.remove();
       nodes_text.remove();
@@ -208,7 +208,7 @@ var links = [
   function paintGraph()
   {
     var time_in_seconds = (Date.now() - start)/1000;
-    if (time_in_seconds > (screenshot_seconds - 5))
+    if (screenshot_seconds > 0 &&  time_in_seconds > (screenshot_seconds - 5))
     {
       width = window.innerWidth * 2;
       height = window.innerHeight * 2;

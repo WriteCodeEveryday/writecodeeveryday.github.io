@@ -3,7 +3,7 @@
 // http://jsDataV.is
 
 var width = window.innerWidth,
-  height = window.innerHeight;
+    height = window.innerHeight;
 
 // Define the data for the example. In general, a force layout
 // requires two data arrays. The first array, here named `nodes`,
@@ -41,8 +41,8 @@ var links = [];
 
 
 var svg = d3.select('body').append('svg')
-  .attr('width', width)
-  .attr('height', height);
+          .attr('width', width)
+          .attr('height', height);
 
 var legendX = 0;
 var legendY = (9*height)/10;
@@ -91,7 +91,7 @@ var node = svg.selectAll('.node')
 
 function tick() {
   force.linkDistance(width/nodes.length);
-  
+
   node.attr('r', 5)
   .attr('cx', function(d) { return d.x; })
   .attr('cy', function(d) { return d.y; });
@@ -173,12 +173,12 @@ function updateGraph(data)
 
 function paintGraph()
 {
-  width = window.innerWidth
+  width = window.innerWidth;
   height = window.innerHeight;
   svg.attr('width', width).attr('height', height);
   force.size([width, height]);
   force.stop();
-    
+
   link = link.data(force.links(), function(d) { return d.source.id + "-" + d.target.id; });
   link.enter().insert("line", ".node").attr("class", "link");
   link.exit().remove();

@@ -4,7 +4,7 @@
 
 var start = Date.now();
 var width = window.innerWidth,
-  height = window.innerHeight;
+    height = window.innerHeight;
 
 // Define the data for the example. In general, a force layout
 // requires two data arrays. The first array, here named `nodes`,
@@ -43,13 +43,13 @@ var links = [];
 
 var force_strength = -100;
 var svg = d3.select('body').append('svg')
-  .attr('width', width)
-  .attr('height', height);
+          .attr('width', width)
+          .attr('height', height);
 
 var legendX = 0;
 var legendY = (9*height)/10;
 
-var legend_text = svg.append('text').text("Legend").style("font-size", "18px").style('fill', '#0a5e96').attr("x", legendX).attr("y",legendY);
+var legend_text = svg.append('text').text("Legend").attr('class', 'hl').style("font-size", "24px").style('fill', '#0a5e96').style('text-transform', 'uppercase').style('letter-spacing', '3px').attr("x", legendX).attr("y",legendY);
 legendY += height/40;
 var legend_input_nodes = svg.append('text').text("Input Nodes").style("font-size", "14px").style('fill', '#F64F53').attr("x", legendX).attr("y",legendY);
 legendY += height/40;
@@ -59,7 +59,7 @@ var legend_dual_nodes = svg.append('text').text("Input/Output Nodes").style("fon
 
 legendX = 0;
 legendY = height/30;
-var stats = svg.append('text').text("Stats").style("font-size", "18px").style('fill', '#0a5e96').attr("x", legendX).attr("y",legendY);
+var stats = svg.append('text').text("Stats").attr('class', 'hl').style("font-size", "24px").style('fill', '#0a5e96').style('text-transform', 'uppercase').style('letter-spacing', '3px').attr("x", legendX).attr("y",legendY);
 legendY += height/40;
 var nodes_text = svg.append('text').style("font-size", "14px").style('fill', '#0a5e96').attr("x", legendX).attr("y",legendY);
 legendY += height/40;
@@ -97,7 +97,7 @@ var node = svg.selectAll('.node')
 
 function tick() {
   force.linkDistance(width/nodes.length);
-  
+
   node.attr('r', 5)
   .attr('cx', function(d) { return d.x; })
   .attr('cy', function(d) { return d.y; });
@@ -179,12 +179,12 @@ function updateGraph(data)
 
 function paintGraph()
 {
-  width = window.innerWidth
+  width = window.innerWidth;
   height = window.innerHeight;
   svg.attr('width', width).attr('height',height);
   force.size([width, height]);
   force.stop();
-    
+
   link = link.data(force.links(), function(d) { return d.source.id + "-" + d.target.id; });
   link.enter().insert("line", ".node").attr("class", "link");
   link.exit().remove();

@@ -59,7 +59,7 @@ var legend_dual_nodes = svg.append('text').text("Input/Output Nodes").style("fon
 
 legendX = 0;
 legendY = height/30;
-var stats = svg.append('text').text("Stats").attr('class', 'hl').style("font-size", "24px").style('fill', '#0a5e96').style('text-transform', 'uppercase').style('letter-spacing', '3px').attr("x", legendX).attr("y",legendY);
+var stats = svg.append('text').text("Stats").attr('class', 'hl').style('fill', '#0a5e96').style('text-transform', 'uppercase').style('letter-spacing', '3px').attr("x", legendX).attr("y",legendY);
 legendY += height/40;
 var nodes_text = svg.append('text').style("font-size", "14px").style('fill', '#0a5e96').attr("x", legendX).attr("y",legendY);
 legendY += height/40;

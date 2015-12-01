@@ -159,7 +159,7 @@ $(document).ready(function(){
 
     if (largest_transaction_amount < totalAmount) {
       largest_transaction_amount = totalAmount;
-      largest_transaction_id.text("LARGEST TRANSACTION: " + (largest_transaction_amount/ 100000000).toFixed(8) + " BTC [" + data.x.hash + "]");
+      largest_transaction_id.text("LARGEST TRANSACTION: " + (largest_transaction_amount/ 100000000).toFixed(8) + " BTC");
     }
 
     nodes_text.text("NODES: " + nodes.length);
@@ -266,11 +266,8 @@ $(document).ready(function(){
 
     var connectionMap = mostConnected();
     connectionMap.sort(compare);
-    //$("#primary").attr("data-bc-address", connectionMap[0].current_node.id).attr("data-bc-amount", "0.00000001").text(connectionMap[0].current_node.id);
-    //$("#secondary").attr("data-bc-address", connectionMap[0].current_node.id).attr("data-bc-amount", "0.00000001").text(connectionMap[1].current_node.id);
-    //bitcoinaddress.generateQR($(".bitcoin-address-qr-container"));
-    //console.log(connectionMap[0].current_node.id);
-    //console.log(connectionMap[1].current_node.id);
+    //$('#primary').qrcode({text: "bitcoin:"+ connectionMap[0].current_node.id +"?amount=0.00000001"});
+    //$('#secondary').qrcode({text: "bitcoin:"+ connectionMap[1].current_node.id +"?amount=0.00000001"});
   }
 
   //Blockchain.info

@@ -42,7 +42,7 @@ var links = [
 
 
   var paint_enabled = true;
-  var screenshot_seconds = 20;
+  var screenshot_seconds = 120;
   var original_force =  -150;
   var force_strength = original_force;
   var svg = d3.select('body').append('svg')
@@ -210,6 +210,12 @@ var links = [
       force_text.remove();
       time_since_start.remove();
       largest_transaction_id.remove();
+
+
+      legend_text.remove();
+      legend_input_nodes.remove();
+      legend_output_nodes.remove();
+      legend_dual_nodes.remove();
 
       Pablo(".input").attr("fill", "#F64F53");
       Pablo(".output").attr("fill", "#309793");

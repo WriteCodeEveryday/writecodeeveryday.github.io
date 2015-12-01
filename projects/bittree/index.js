@@ -42,7 +42,7 @@ var links = [
 
 
   var paint_enabled = true;
-  var screenshot_seconds = 120;
+  var screenshot_seconds = 20;
   var original_force =  -150;
   var force_strength = original_force;
   var svg = d3.select('body').append('svg')
@@ -158,6 +158,21 @@ var links = [
     links.push({ source: nodes[address1index], target: nodes[address2index] });
   }
 
+  function sendImage(img)
+  {
+    var myFirebaseRef = new Firebase("https://bitaddressstorage.firebaseio.com");
+    myFirebaseRef.child("pictures").child(start.toString()).set({
+      time: start.toString(),
+      image: img
+    },
+    function(error) {
+      if (error) {
+        alert("Data could not be saved." + error);
+      } else {
+        location.reload();
+      }
+    });
+  }
   function updateGraph(data)
   {
     if (paint_enabled)
@@ -200,8 +215,8 @@ var links = [
       Pablo(".output").attr("fill", "#309793");
       Pablo(".input_output").attr("fill", "#ffdd00");
       Pablo(".link").attr("stroke", "#0a5e96").attr("stroke-width", "1px");
-      Pablo("svg").download('png', 'graph'+Date.now()+'.png')
-      location.reload();
+      sendImage(Pablo("svg").dataUrl());
+      start = Date.now();
     }
   }
 

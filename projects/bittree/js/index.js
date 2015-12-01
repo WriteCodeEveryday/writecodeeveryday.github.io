@@ -1,43 +1,14 @@
-// Define the dimensions of the visualization. We're using
-// a size that's convenient for displaying the graphic on
-// http://jsDataV.is
+$(document).ready(function(){
 
-var start = Date.now();
-var width = window.innerWidth,
-height = window.innerHeight;
+  var start = Date.now();
+  var width = window.innerWidth,
+  height = window.innerHeight;
 
-// Define the data for the example. In general, a force layout
-// requires two data arrays. The first array, here named `nodes`,
-// contains the object that are the focal point of the visualization.
-// The second array, called `links` below, identifies all the links
-// between the nodes. (The more mathematical term is "edges.")
 
-// For the simplest possible example we only define two nodes. As
-// far as D3 is concerned, nodes are arbitrary objects. Normally the
-// objects wouldn't be initialized with `x` and `y` properties like
-// we're doing below. When those properties are present, they tell
-// D3 where to place the nodes before the force layout starts its
-// magic. More typically, they're left out of the nodes and D3 picks
-// random locations for each node. We're defining them here so we can
-// get a consistent application of the layout which lets us see the
-// effects of different properties.
-
-/*
-var nodes = [
-  { x:   width/3, y: height/2 },
-  { x: 2*width/3, y: height/2 }
-  ];*/
 
   var nodes = [];
 
-// The `links` array contains objects with a `source` and a `target`
-// property. The values of those properties are the indices in
-// the `nodes` array of the two endpoints of the link.
 
-/*
-var links = [
-  { source: 0, target: 1 }
-  ]; */
   var links = [];
 
 
@@ -114,8 +85,7 @@ var links = [
 
   force.start();
 
-  function existOrCreate(address1, address2, value1, value2)
-  {
+  function existOrCreate(address1, address2, value1, value2) {
     var address1index = -1;
     var address2index = -1;
 
@@ -159,8 +129,7 @@ var links = [
     links.push({ source: nodes[address1index], target: nodes[address2index] });
   }
 
-  function sendImage(img)
-  {
+  function sendImage(img) {
     var myFirebaseRef = new Firebase("https://bitaddressstorage.firebaseio.com");
     myFirebaseRef.child("pictures").child(start.toString()).set({
       time: start.toString(),
@@ -174,8 +143,7 @@ var links = [
       }
     });
   }
-  function updateGraph(data)
-  {
+  function updateGraph(data) {
     if (paint_enabled)
     {
       var ins = data.x.inputs
@@ -190,10 +158,9 @@ var links = [
       paintGraph();
     }
 
-    if (largest_transaction_amount < totalAmount)
-    {
+    if (largest_transaction_amount < totalAmount) {
       largest_transaction_amount = totalAmount;
-      largest_transaction_id.text("LARGEST TRANSACTION: " + (largest_transaction_amount/ 100000000).toFixed(8) + " BTC [" + data.x.hash + "]");
+      largest_transaction_id.text("LARGEST TRANSACTION: " + (largest_transaction_amount/ 100000000).toFixed(8) + " BTC");
     }
 
     nodes_text.text("NODES: " + nodes.length);
@@ -203,8 +170,7 @@ var links = [
     force_text.text("FORCE:  " + force_strength);
 
 
-    if (screenshot_seconds > 0 && time_in_seconds > screenshot_seconds)
-    {
+    if (screenshot_seconds > 0 && time_in_seconds > screenshot_seconds) {
       stats.remove();
       nodes_text.remove();
       links_text.remove();
@@ -227,18 +193,48 @@ var links = [
     }
   }
 
-  function paintGraph()
-  {
+  function connectionCount(input_node, nodes_list, links_list) {
+    var connections = links_list.filter(function (el) {
+      return el.source == input_node ||
+      el.target == input_node;
+    });
+    nodes_list.splice(connections, 0);
+    return connections;
+  }
+
+  function mostConnected() {
+    var nodes_list = nodes.slice(0);
+    var links_list = links.slice(0);
+
+    var results = [];
+    for (current_node of nodes_list) {
+      var linked = connectionCount(current_node, nodes_list, links_list);
+      var length = linked.length;
+      if (length > 0)
+      {
+        results.push({current_node, length});
+      }
+    }
+    return results;
+  }
+
+  function compare(a,b) {
+    if (a.length > b.length)
+      return -1;
+    if (a.length < b.length)
+      return 1;
+    return 0;
+  }
+
+  function paintGraph() {
     var time_in_seconds = (Date.now() - start)/1000;
-    if (screenshot_seconds > 0 &&  time_in_seconds > (screenshot_seconds - 5))
-    {
+    if (screenshot_seconds > 0 &&  time_in_seconds > (screenshot_seconds - 5)) {
       width = window.innerWidth * 2;
       height = window.innerHeight * 2;
       force_strength = original_force * 2;
       paint_enabled = false;
     }
-    else
-    {
+    else {
       width = window.innerWidth;
       height = window.innerHeight;
     }
@@ -262,45 +258,30 @@ var links = [
     link.exit().remove();
 
     node = node.data(force.nodes(), function(d) { return d.id;});
-    node.enter().append("circle").attr("class", function(d) { return "node " + d.type; }).attr("r", 5/Math.log(nodes.length));
+    node.enter().append("circle").attr("class", function(d) { return "node " + d.type; }).attr("r", 5);
     node.exit().remove();
 
     force.charge(force_strength/Math.log(nodes.length));
     zoom.scale(1/nodes.length);
     force.start();
+
+    var connectionMap = mostConnected();
+    connectionMap.sort(compare);
+    //$('#primary').qrcode({text: "bitcoin:"+ connectionMap[0].current_node.id +"?amount=0.00000001"});
+    //$('#secondary').qrcode({text: "bitcoin:"+ connectionMap[1].current_node.id +"?amount=0.00000001"});
   }
 
-//Blockchain.info
-var blockchain = new WebSocket("wss://ws.blockchain.info/inv");
-blockchain.onmessage = function(msg) {
-  var json = JSON.parse(msg.data);
-  if (json.op == "utx")
-  {
-    updateGraph(json);
-  }
-};
-blockchain.onopen = function()
-{
-  blockchain.send(JSON.stringify({
-    "op":"unconfirmed_sub"
-  }))
-}
-
-
-
-// By the time you've read this far in the code, the force
-// layout has undoubtedly finished its work. Unless something
-// went horribly wrong, you should see two light grey circles
-// connected by a single dark grey line. If you have a screen
-// ruler (such as [xScope](http://xscopeapp.com) handy, measure
-// the distance between the centers of the two circles. It
-// should be somewhere close to the `linkDistance` parameter we
-// set way up in the beginning (480 pixels). That, in the most
-// basic of all nutshells, is what a force layout does. We
-// tell it how far apart we want connected nodes to be, and
-// the layout keeps moving the nodes around until they get
-// reasonably close to that value.
-
-// Of course, there's quite a bit more than that going on
-// under the hood. We'll take a closer look starting with
-// the next example.
+  //Blockchain.info
+  var blockchain = new WebSocket("wss://ws.blockchain.info/inv");
+  blockchain.onmessage = function(msg) {
+   var json = JSON.parse(msg.data);
+   if (json.op == "utx") {
+     updateGraph(json);
+   }
+ };
+ blockchain.onopen = function() {
+   blockchain.send(JSON.stringify({
+     "op":"unconfirmed_sub"
+   }))
+ }
+});

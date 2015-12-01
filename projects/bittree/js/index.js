@@ -51,6 +51,7 @@ $(document).ready(function(){
   svg.call(zoom);
 
   var force = d3.layout.force()
+
   .size([width, height])
   .nodes(nodes)
   .links(links)

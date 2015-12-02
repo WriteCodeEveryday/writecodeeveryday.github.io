@@ -1,0 +1,33 @@
+body {
+  font-family: Source Code Pro;
+  position:relative;
+}
+.input {
+  fill: #F64F53;
+}
+
+.output {
+  fill: #309793;
+}
+
+.input_output {
+  fill: #ffdd00;
+}
+
+
+.link {
+  stroke: #0a5e96;
+  stroke-width: 1px;
+}
+.hl {
+  font-family: "Source Code Pro";
+}
+.hl1 {
+  font-family: "Source Code Pro";
+}
+.demo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}

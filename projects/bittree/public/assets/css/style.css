@@ -1,0 +1,38 @@
+@font-face {
+  font-family: "Lovelo Black";
+  src: url("../fonts/Lovelo Black.otf");
+}
+@font-face {
+  font-family: "Lovelo Line Bold";
+  src: url("../fonts/Lovelo Line Bold.otf");
+}
+@font-face {
+  font-family: "Lovelo Line Light";
+  src: url("../fonts/Lovelo Line Light.otf");
+}
+body {
+  font-family: Lovelo Black;
+}
+.input {
+  fill: #F64F53;
+}
+
+.output {
+  fill: #309793;
+}
+
+.input_output {
+  fill: #ffdd00;
+}
+
+
+.link {
+  stroke: #0a5e96;
+  stroke-width: 1px;
+}
+.hl {
+  font-family: "Lovelo Line Bold";
+}
+.hl1 {
+  font-family: "Lovelo Line Light";
+}

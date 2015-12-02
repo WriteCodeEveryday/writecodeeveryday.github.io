@@ -4,13 +4,10 @@ $(document).ready(function(){
   var width = window.innerWidth,
   height = window.innerHeight;
 
-
-
   var nodes = [];
 
 
   var links = [];
-
 
   var paint_enabled = true;
   var screenshot_seconds = 120;
@@ -99,29 +96,21 @@ $(document).ready(function(){
       }
     }
 
-    if (address1index == -1)
-    {
+    if (address1index == -1) {
       address1index = nodes.length;
 
       nodes.push({id: address1, value: value1, x: Math.random()*width, y: Math.random()*height, type: "input"});
-    }
-    else
-    {
-      if (nodes[address1index].type != "input")
-      {
+    } else {
+      if (nodes[address1index].type != "input") {
         nodes[address1index].type = "input_output";
       }
     }
 
-    if (address2index == -1)
-    {
+    if (address2index == -1) {
       address2index = nodes.length;
       nodes.push({id: address2, value: value2,x: Math.random()*width, y: Math.random()*height, type: "output"});
-    }
-    else
-    {
-      if (nodes[address2index].type != "output")
-      {
+    } else {
+      if (nodes[address2index].type != "output") {
         nodes[address2index].type = "input_output";
       }
     }
@@ -144,8 +133,7 @@ $(document).ready(function(){
     });
   }
   function updateGraph(data) {
-    if (paint_enabled)
-    {
+    if (paint_enabled) {
       var ins = data.x.inputs
       var out = data.x.out
       var totalAmount = 0;

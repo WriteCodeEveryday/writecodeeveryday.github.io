@@ -7,6 +7,10 @@ app.use(express.static(__dirname + '/public/assets'));
 var views_dir = __dirname + '/public/views/';
 
 app.get('/', function (req, res) {
+  res.sendFile(views_dir + 'home.html');
+});
+
+app.get('/unconfirmed', function (req, res) {
   res.sendFile(views_dir + 'index.html');
 });
 

@@ -1,17 +1,6 @@
-@font-face {
-  font-family: "Lovelo Black";
-  src: url("../fonts/Lovelo Black.otf");
-}
-@font-face {
-  font-family: "Lovelo Line Bold";
-  src: url("../fonts/Lovelo Line Bold.otf");
-}
-@font-face {
-  font-family: "Lovelo Line Light";
-  src: url("../fonts/Lovelo Line Light.otf");
-}
 body {
-  font-family: Lovelo Black;
+  font-family: Source Code Pro;
+  position:relative;
 }
 .input {
   fill: #F64F53;
@@ -31,8 +20,14 @@ body {
   stroke-width: 1px;
 }
 .hl {
-  font-family: "Lovelo Line Bold";
+  font-family: "Source Code Pro";
 }
 .hl1 {
-  font-family: "Lovelo Line Light";
+  font-family: "Source Code Pro";
+}
+.demo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }

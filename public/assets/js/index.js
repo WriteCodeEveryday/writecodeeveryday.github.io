@@ -4,10 +4,13 @@ $(document).ready(function(){
   var width = window.innerWidth,
   height = window.innerHeight;
 
+
+
   var nodes = [];
 
 
   var links = [];
+
 
   var paint_enabled = true;
   var screenshot_seconds = 120;
@@ -22,25 +25,25 @@ $(document).ready(function(){
 
   var legend_text = svg.append('text').text("Legend").attr('class', 'hl').style("font-size", "24px").style('fill', '#0a5e96').style('text-transform', 'uppercase').style('letter-spacing', '3px').attr("x", legendX).attr("y",legendY);
   legendY += height/40;
-  var legend_input_nodes = svg.append('text').text("Input Nodes").style("font-size", "14px").style('fill', '#F64F53').attr("x", legendX).attr("y",legendY);
+  var legend_input_nodes = svg.append('text').text("Input Transactions").style("font-size", "14px").style('fill', '#F64F53').attr("x", legendX).attr("y",legendY);
   legendY += height/40;
-  var legend_output_nodes = svg.append('text').text("Output Nodes").style("font-size", "14px").style('fill', '#309793').attr("x", legendX).attr("y",legendY);
+  var legend_output_nodes = svg.append('text').text("Output Transactions").style("font-size", "14px").style('fill', '#309793').attr("x", legendX).attr("y",legendY);
   legendY += height/40;
-  var legend_dual_nodes = svg.append('text').text("Input/Output Nodes").style("font-size", "14px").style('fill', '#ffdd00').attr("x", legendX).attr("y",legendY);
+  var legend_dual_nodes = svg.append('text').text("Input & Output Transactions").style("font-size", "14px").style('fill', '#ffdd00').attr("x", legendX).attr("y",legendY);
 
   legendX = 0;
   legendY = height/30;
-  var stats = svg.append('text').text("Stats").attr('class', 'hl').style("font-size", "24px").style('fill', '#0a5e96').style('text-transform', 'uppercase').style('letter-spacing', '3px').attr("x", legendX).attr("y",legendY);
+  var stats = svg.append('text').text("Stats").attr('class', 'hl').style("font-size", "24px").style('fill', '#000000').style('text-transform', 'uppercase').style('letter-spacing', '3px').attr("x", legendX).attr("y",legendY);
   legendY += height/40;
-  var nodes_text = svg.append('text').style("font-size", "14px").style('fill', '#0a5e96').attr("x", legendX).attr("y",legendY);
+  var nodes_text = svg.append('text').style("font-size", "14px").style('fill', '#000000').attr("x", legendX).attr("y",legendY);
   legendY += height/40;
-  var links_text = svg.append('text').style("font-size", "14px").style('fill', '#0a5e96').attr("x", legendX).attr("y",legendY);
+  var links_text = svg.append('text').style("font-size", "14px").style('fill', '#000000').attr("x", legendX).attr("y",legendY);
   legendY += height/40;
-  var force_text = svg.append('text').style("font-size", "14px").style('fill', '#0a5e96').attr("x", legendX).attr("y",legendY);
+  var force_text = svg.append('text').style("font-size", "14px").style('fill', '#000000').attr("x", legendX).attr("y",legendY);
   legendY += height/40;
-  var time_since_start = svg.append('text').style("font-size", "14px").style('fill', '#0a5e96').attr("x", legendX).attr("y",legendY);
+  var time_since_start = svg.append('text').style("font-size", "14px").style('fill', '#000000').attr("x", legendX).attr("y",legendY);
   legendY += height/40;
-  var largest_transaction_id = svg.append('text').style("font-size", "14px").style('fill', '#0a5e96').attr("x", legendX).attr("y",legendY);
+  var largest_transaction_id = svg.append('text').style("font-size", "14px").style('fill', '#000000').attr("x", legendX).attr("y",legendY);
   var largest_transaction_amount = 0;
 
 
@@ -96,21 +99,29 @@ $(document).ready(function(){
       }
     }
 
-    if (address1index == -1) {
+    if (address1index == -1)
+    {
       address1index = nodes.length;
 
       nodes.push({id: address1, value: value1, x: Math.random()*width, y: Math.random()*height, type: "input"});
-    } else {
-      if (nodes[address1index].type != "input") {
+    }
+    else
+    {
+      if (nodes[address1index].type != "input")
+      {
         nodes[address1index].type = "input_output";
       }
     }
 
-    if (address2index == -1) {
+    if (address2index == -1)
+    {
       address2index = nodes.length;
       nodes.push({id: address2, value: value2,x: Math.random()*width, y: Math.random()*height, type: "output"});
-    } else {
-      if (nodes[address2index].type != "output") {
+    }
+    else
+    {
+      if (nodes[address2index].type != "output")
+      {
         nodes[address2index].type = "input_output";
       }
     }
@@ -133,7 +144,8 @@ $(document).ready(function(){
     });
   }
   function updateGraph(data) {
-    if (paint_enabled) {
+    if (paint_enabled)
+    {
       var ins = data.x.inputs
       var out = data.x.out
       var totalAmount = 0;
@@ -151,7 +163,7 @@ $(document).ready(function(){
       largest_transaction_id.text("LARGEST TRANSACTION: " + (largest_transaction_amount/ 100000000).toFixed(8) + " BTC");
     }
 
-    nodes_text.text("NODES: " + nodes.length);
+    nodes_text.text("TRANSACTIONS: " + nodes.length);
     links_text.text("LINKS: " + links.length);
     var time_in_seconds = (Date.now() - start)/1000;
     time_since_start.text("TIME: " + time_in_seconds + " seconds");

@@ -33,7 +33,7 @@ function crackBrainWallets(data){
   data.forEach(function (password, i) {
     finalized_data.push(generateBrainWalletFromHash(password));
     if (i % one_tenth == 0){
-      console.log("Status: " + i + " cracked (" + ((i/data.length)*100).toFixed(2) + "%)");
+      console.log("Status: " + i + " generated (" + ((i/data.length)*100).toFixed(2) + "%)");
     }
   });
   return finalized_data;
@@ -62,10 +62,10 @@ function balanceCheck(data){
 }
 
 onmessage = function(e) {
-  console.log("Beginning cracking attempts - Found " + e.data[0].length + " targets");
+  console.log("Beginning generation attempts - Found " + e.data[0].length + " targets");
   var password_list = e.data[0]
   var finalized_wallets = crackBrainWallets(password_list);
-  console.log("Completed cracking data");
+  console.log("Completed generating data");
   console.log("Attempting balance checks");
   balanceCheck(finalized_wallets);
 }

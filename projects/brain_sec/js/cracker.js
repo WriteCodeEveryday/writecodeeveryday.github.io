@@ -20,14 +20,23 @@ $(document).ready( function() {
       }
     });
 
+    function runCrack(){
+      cracker_worker.postMessage([raw_data]);
+      $("#single_account").text("RUNNING " + raw_data.length + " WALLETS");
+      $("#all_accounts").text("RUNNING " + raw_data.length + " WALLETS");
+      $("#all_balance").text("RUNNING " + raw_data.length + " WALLETS");
+    }
     $("#file_list").on('click', ".target_text", function() {
       $.getJSON($(this).attr("url"), function(data) {
         raw_data = atob(data.content).split("\n");
-        cracker_worker.postMessage([raw_data]);
-        $("#single_account").text("RUNNING " + raw_data.length + " WALLETS");
-        $("#all_accounts").text("RUNNING " + raw_data.length + " WALLETS");
-        $("#all_balance").text("RUNNING " + raw_data.length + " WALLETS");
+        runCrack();
       });
+    });
+
+    $("#custom_run").click(function(){
+      raw_data = [];
+      raw_data.push($("#custom_password").val());
+      runCrack();
     });
 
     function showData(data){

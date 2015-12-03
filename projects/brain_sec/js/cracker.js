@@ -24,9 +24,9 @@ $(document).ready( function() {
       $.getJSON($(this).attr("url"), function(data) {
         raw_data = atob(data.content).split("\n");
         cracker_worker.postMessage([raw_data]);
-        $("#single_account").text("RUNNING");
-        $("#all_accounts").text("RUNNING");
-        $("#all_balance").text("RUNNING");
+        $("#single_account").text("RUNNING " + raw_data.length + " WALLETS");
+        $("#all_accounts").text("RUNNING " + raw_data.length + " WALLETS");
+        $("#all_balance").text("RUNNING " + raw_data.length + " WALLETS");
       });
     });
 

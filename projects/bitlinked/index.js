@@ -175,8 +175,8 @@ $(document).ready(function(){
   }
 
   function paintGraph() {
-    width = window.innerWidth;
-    height = window.innerHeight;
+    width = (window.innerWidth > width ?  window.innerWidth : width);
+    height = (window.innerHeight > height ?  window.innerHeight : height);
     
     svg.attr('width', width).attr('height',height);
     force.size([width, height]);
@@ -215,6 +215,22 @@ $(document).ready(function(){
     });
   }
  }
+
+ $( document ).on( "mousemove", function( event ) {
+    legendX = event.pageX - event.pageX/2;
+    legendY = event.pageY;
+    legend_block.attr("x", legendX).attr("y",legendY);
+    legendY += 40;
+    legend_time.attr("x", legendX).attr("y",legendY);
+  });
+
+  $('html').bind('mousewheel DOMMouseScroll', function (e) {
+    var delta = (e.originalEvent.wheelDelta || -e.originalEvent.detail);
+    if (delta == 0) {
+      height += 20;
+      width += 40;
+    }
+  });
 
  $("#start").click(function(){
   current_block = parseInt($("#height").val());

@@ -2,7 +2,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import tweepy, time, sys, websocket
+import json
+import time
+import sys
+import tweepy # IMPORT
+from urllib2 import Request, urlopen, URLError
+
 
 # removed command line arguments bc theres none
 
@@ -17,40 +22,21 @@ api = tweepy.API(auth)
 
 pricing = {}
 
-def on_error(ws, error):
-    print(error)
+if __name__ == "__main__":
+    def check_bullrun():
+        if (pricing["first"] + 20 < pricing["second"]):
+            #api.update_status(line)
+            print("Post something")
+        print("Difference: $" + str(pricing["second"]-pricing["first"]))
 
-def on_close(ws):
-    print("### closed ###")
+    def get_coinbase():
+        request = Request('https://api.coinbase.com/v2/prices/buy')
+        response = urlopen(request)
+        sub = json.loads(response.read())
+        return float(sub["data"]["amount"])
 
-def bitfinex_on_open(ws):
-    sub = json.dumps({"event": "subscribe", "channel": "trades", "pair": "BTCUSD"})
-    ws.send(sub)
-    print("Intitalizing Bitfinex Socket")
-
-def bitfinex_on_message(ws, message):
-    sub = json.loads(message)
-    if isinstance(sub, dict) and sub["event"]:
-        return;
-
-    if sub[1] != "hb" and len(sub) > 2:
-        pricing[time.time()]  = sub[3]
-
-    print(pricing)
-
-bitfinex = websocket.WebSocketApp("wss://api2.bitfinex.com:3000/ws",
-    on_message = bitfinex_on_message,
-    on_error = on_error,
-    on_close = on_close)
-
-bitfinex.on_open = bitfinex_on_open
-bitfinex_thread = Thread(target = bitfinex.run_forever)
-
-def check_bullrun():
-    # api.update_status(line)
-    print("")
-
-
-while True:
-    time.sleep(60*60)#Tweet every 15 minutes
-    # check_bullrun()
+    while True:
+        pricing["first"] = get_coinbase();
+        time.sleep(20)#Tweet every 60 minutes
+        pricing["second"] = get_coinbase();
+        check_bullrun()

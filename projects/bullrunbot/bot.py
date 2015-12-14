@@ -17,6 +17,12 @@ api = tweepy.API(auth)
 
 pricing = {}
 
+def on_error(ws, error):
+    print(error)
+
+def on_close(ws):
+    print("### closed ###")
+
 def bitfinex_on_open(ws):
     sub = json.dumps({"event": "subscribe", "channel": "trades", "pair": "BTCUSD"})
     ws.send(sub)

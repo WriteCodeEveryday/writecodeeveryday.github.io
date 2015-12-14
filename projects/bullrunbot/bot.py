@@ -36,6 +36,8 @@ def bitfinex_on_message(ws, message):
     if sub[1] != "hb" and len(sub) > 2:
         pricing[time.time()]  = sub[3]
 
+    print(pricing)
+
 bitfinex = websocket.WebSocketApp("wss://api2.bitfinex.com:3000/ws",
     on_message = bitfinex_on_message,
     on_error = on_error,
@@ -45,9 +47,10 @@ bitfinex.on_open = bitfinex_on_open
 bitfinex_thread = Thread(target = bitfinex.run_forever)
 
 def check_bullrun:
-    api.update_status(line)
+    # api.update_status(line)
+    # print(pricing)
 
 
 while True:
     time.sleep(60*60)#Tweet every 15 minutes
-    check_bullrun()
+    # check_bullrun()

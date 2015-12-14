@@ -46,9 +46,9 @@ bitfinex = websocket.WebSocketApp("wss://api2.bitfinex.com:3000/ws",
 bitfinex.on_open = bitfinex_on_open
 bitfinex_thread = Thread(target = bitfinex.run_forever)
 
-def check_bullrun:
+def check_bullrun():
     # api.update_status(line)
-    # print(pricing)
+    print("")
 
 
 while True:

@@ -1,10 +1,10 @@
 
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
- 
+
 import tweepy, time, sys, websocket
- 
-argfile = str(sys.argv[1])
+
+# removed command line arguments bc theres none
 
 #enter the corresponding information from your Twitter application:
 CONSUMER_KEY = '1234abcd...'#keep the quotes, replace this with your consumer key
@@ -23,27 +23,25 @@ def bitfinex_on_open(ws):
     print("Intitalizing Bitfinex Socket")
 
 def bitfinex_on_message(ws, message):
-  sub = json.loads(message) 
-  if isinstance(sub, dict) and sub["event"]:
-    return;
+    sub = json.loads(message)
+    if isinstance(sub, dict) and sub["event"]:
+        return;
 
-  if sub[1] != "hb" and len(sub) > 2:
-    pricing[time.time()]  = sub[3] 
-
+    if sub[1] != "hb" and len(sub) > 2:
+        pricing[time.time()]  = sub[3]
 
 bitfinex = websocket.WebSocketApp("wss://api2.bitfinex.com:3000/ws",
-							on_message = bitfinex_on_message,
-              on_error = on_error,
-              on_close = on_close)
+    on_message = bitfinex_on_message,
+    on_error = on_error,
+    on_close = on_close)
+
 bitfinex.on_open = bitfinex_on_open
 bitfinex_thread = Thread(target = bitfinex.run_forever)
 
-
-
-filename=open(argfile,'r')
-f=filename.readlines()
-filename.close()
- 
-for line in f:
+def check_bullrun:
     api.update_status(line)
-    time.sleep(900)#Tweet every 15 minutes
+
+
+while True:
+    time.sleep(60*60)#Tweet every 15 minutes
+    check_bullrun()

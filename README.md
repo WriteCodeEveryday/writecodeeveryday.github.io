@@ -1,1 +1,11 @@
-# atheistoffail.github.io
+# UNCONFIRMED
+
+#### Installation
+
+```sh
+npm install
+```
+
+```sh
+npm start
+```

@@ -97,7 +97,7 @@
         encode_integer(1)
         )
       ),
-    encode_constructed(1, 
+    encode_constructed(1,
       encode_bitstring([0].concat(encoded_pub))
       )
     );
@@ -190,4 +190,4 @@ function generateBrainWalletFromHash(txt)
   var hash = Crypto.SHA256(txt, { asBytes: true });
   returns["result"] = generate(Crypto.util.bytesToHex(hash));
   return returns;
-} 
+}

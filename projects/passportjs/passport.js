@@ -143,7 +143,7 @@ Passport = (function(args) {
 
 	if (!firstLine || !secondLine || !firstLine.length == 44 || !secondLine.length == 44){
 		pssprt["error"] = "Something is not right"
-		return
+		return pssprt;
 	}
 
 	pssprt["passport"] = {}

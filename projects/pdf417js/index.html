@@ -1,0 +1,129 @@
+<html>
+<head>
+	<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	ga('create', 'UA-62536208-2', 'auto');
+	ga('send', 'pageview');
+
+	</script>
+		<script src="chance.min.js"></script>
+		<script src="pdf417-min.js"></script>
+		<script src="pdf417.js"></script>
+
+		<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+		<!-- Latest compiled and minified CSS -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+		<!-- Optional theme -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+
+		<!-- Latest compiled and minified JavaScript -->
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+	</head>
+
+	<body>
+		<div class="row">
+			<div class="col-lg-6 text-center">
+				<div id="status">Plain PDF417</div>
+				<div id="pdf_output" class='text-center'></div>
+			</div>
+
+			<div class="col-lg-6">
+				<h2 class="text-center">Generate New PDF417</h2>
+				<div style='margin-left: auto; margin-right: auto'>
+					<strong>Description: </strong>
+					<span>This project can be used to test "simple" ID scanning technology relying on PDF417 verification.</span>
+					<br />
+					<ul>
+						<li>A Plain PDF417 is a 'valid' ID code that should resolve to a valid identity.</li>
+						<li>An OFAC Positive PDF417 is an ID from an SDN restricted individual.</li>
+						<li>An Underage PDF417 is an ID from a child/teenager.</li>
+						<li>A Expired PDF417 is an ID that has already expired.</li>
+						<li>A TimeTraveler PDF417 is an ID that was issued in the future.</li>
+					</ul>
+
+
+					<strong>Settings: </strong>
+					<span>Click on any combination of settings to generate the code or use "All Data" to generate all.</span>
+					<div class="checkbox">
+						<label><input type="checkbox" value="" id="ofac">OFAC Positive</label>
+					</div>
+					<div class="checkbox">
+						<label><input type="checkbox" value="" id="underage">Underage</label>
+					</div>
+					<div class="checkbox">
+						<label><input type="checkbox" value="" id="expired">Expired</label>
+					</div>
+					<div class="checkbox">
+						<label><input type="checkbox" value="" id="timeTravel">Time Traveler</label>
+					</div>
+					<div class="checkbox">
+						<label><input type="checkbox" value="" id="allData">All Data</label>
+					</div>
+				</div>
+			</div>
+
+		</div>
+		<script type="text/javascript">
+			function getData(){
+				var ofac = $("#ofac").is(':checked')
+				var underage = $("#underage").is(':checked')
+				var expired = $("#expired").is(':checked')
+				var timeTravel = $("#timeTravel").is(':checked')
+				var allData = $("#allData").is(':checked')
+
+				$("#status").text('');
+				if (allData){
+					$("#pdf_output").html('')
+					$("#status").text($("#status").text() + "Plain PDF417");
+					var pst = Pdf417([false,false,false,false]);
+
+					$("#pdf_output").append('<br /><span style="margin-top: 30px">OFAC Positive PDF417</span><br />')
+					var pst = Pdf417([true,false,false,false]);
+
+					$("#pdf_output").append('<br /><span style="margin-top: 30px">Underage PDF417</span><br />')
+					var pst = Pdf417([false,true,false,false]);
+
+					$("#pdf_output").append('<br /><span style="margin-top: 30px">Expired PDF417</span><br />')
+					var pst = Pdf417([false,false,true,false]);
+
+					$("#pdf_output").append('<br /><span style="margin-top: 30px">Time Travel PDF417</span><br />')
+					var pst = Pdf417([false,false,false,true]);
+				} else {
+					if (ofac){
+						$("#status").text($("#status").text() + "OFAC Positive ");
+					}
+
+					if (underage){
+						$("#status").text($("#status").text() + "Underage ");
+					}
+
+					if (expired){
+						$("#status").text($("#status").text() + "Expired ");
+					}
+
+					if (timeTravel){
+						$("#status").text($("#status").text() + "Time Travel ");
+					}
+
+					if (!ofac && !underage && !expired && !timeTravel){
+						$("#status").text($("#status").text() + "Plain ");
+					}
+
+					$("#status").text($("#status").text() + "PDF417");
+					$("#pdf_output").html('')
+					var pst = Pdf417([ofac,underage,timeTravel,expired]);
+				}
+			}
+
+			$(document).ready(function(){
+				getData();
+				$(".checkbox").click(getData);
+			});
+		</script>
+	</body>
+</html>

@@ -33,26 +33,19 @@ function generate_pdf(ofac, underage, futureIssuance, expired){
   var codes = {
     DAA: 'fullName',
     DAC: 'firstName',
-    DCT: 'firstName',
     DAB: 'lastName',
-    DCS: 'lastName',
-    DBB: 'dateOfBirth',
     DAG: 'address',
-    DAL: 'address',
     DAI: 'city',
-    DAN: 'city',
     DAJ: 'state',
-    DAO: 'state',
-    DCG: 'country',
-    DAP: 'postalCode',
     DAK: 'postalCode',
     DAQ: 'licenseNumber',
     DAR: 'licenseClass',
     DAS: 'licenseRestrictions',
     DAT: 'licenseEndorsements',
-    DAB: 'expirationDate',
-    DBD: 'issuanceDate',
+    DBA: 'expirationDate',
+    DBB: 'dateOfBirth',
     DBC: 'gender',
+    DBD: 'issuanceDate',
     DAU: 'height'
   }
 
@@ -87,21 +80,21 @@ function generate_pdf(ofac, underage, futureIssuance, expired){
   var gender = chance.integer({min: 1, max: 2})
   var height = chance.integer({min: 501, max: 512})
 
-  var fullName = firstName + " " + lastName;
+  var fullName = lastName + ", " + firstName;
   var data_codes = {
-    "firstName": firstName,
-    "lastName": lastName,
-    "fullName": fullName,
+    "firstName": firstName.toUpperCase(),
+    "lastName": lastName.toUpperCase(),
+    "fullName": fullName.toUpperCase(),
     "dateOfBirth": dob.split("/").join('').split(",").join(''),
-    "address": chance.address(),
-    "city": chance.city(),
-    "state": chance.state(),
+    "address": chance.address().toUpperCase(),
+    "city": chance.city().toUpperCase(),
+    "state": chance.state().toUpperCase(),
     "country": 'US',
     "postalCode": chance.zip({plusfour: true}),
-    "licenseNumber": lastName[0] + chance.integer({min: 1000000000, max: 999999999999}),
+    "licenseNumber": lastName[0].toUpperCase() + chance.integer({min: 1000000000, max: 999999999999}),
     "licenseClass": ['A','B','C','E'].randomElement(),
     "licenseRestrictions": ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'I', 'J', 'K', 'L', 'M', 'N', 'P', 'S', 'T', 'X', 'Y', '1', '2', '3', '4', '5', '6', '7', 'NONE'].randomElement(),
-    "licenseEndorsements": ['H', 'N', 'P', 'S', 'T', 'X'].randomElement(),
+    "licenseEndorsements": ['H', 'N', 'P', 'S', 'T', 'X', 'NONE'].randomElement(),
     "expirationDate": expirationDate.split("/").join('').split(",").join(''),
     "issuanceDate": issuanceDate.split("/").join('').split(",").join(''),
     "gender": gender,
@@ -114,11 +107,42 @@ function generate_pdf(ofac, underage, futureIssuance, expired){
     codes[lookup] = data_codes[codes[lookup]];
   }
 
-  var data = "@\nANSI WHYACCEPTTHISDLSERIOUSLYNOONECHECKSANSICODESDL\n";
+  var data = '';
   for (var i = 0; i < keys.length; i++){
     var lookup = keys[i];
-    data += lookup + codes[lookup] + "\n"
+    if (i > 0){
+      data += "\n";
+    }
+    data += lookup + codes[lookup];
   }
+  data += " ZFZA\n";
+  data += "ZFB\n";
+  data += "ZFCT" + chance.integer({min: 100000000000, max: 900000000000}) + "\n";
+  data += "ZFD\n";
+  data += "ZFE" + chance.birthday({ string: true, american: true, day: chance.integer({min: 10, max: 28}), month: chance.integer({min: 9, max: 11}), year: chance.integer({min: current_year - 10, max: current_year}) }).split("/").join('-').split(",").join('-')
+
+  var issuer = chance.integer({min: 100000, max: 900000})
+  var version_number = '01'
+  var subfile_number = '02'
+
+  //setup initial ANSI string.
+  var data_calculation = "@\n\rANSI " + issuer + version_number + subfile_number + "DL" + '00000000' + "ZF" + chance.integer({min: 100000, max: 900000}) + "DL";
+
+  //data-length, first part is where the first part of the ID begins, second part is where it ends.
+  var data_length = '' + data_calculation.length;
+  while (data_length.length < 4){
+    data_length = '0' + data_length;
+  }
+
+  var final_length = data_calculation.length + data.length;
+  final_length = '' + final_length;
+  while (final_length < 4){
+    final_length = '0' + data_length;
+  }
+  data_length = data_length + final_length
+
+  var data_final = "@\n\rANSI " + issuer + version_number + subfile_number + "DL" + data_length + "ZF" + chance.integer({min: 100000, max: 900000}) + "DL";
+  data = data_final + data
 
   PDF417.init(data);
   var barcode = PDF417.getBarcodeArray();

@@ -296,8 +296,8 @@ $(document).ready(function(){
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \\section{Awards}
-\\begin{tabular}{rll}
 
+\\begin{tabular}{rll}
 `
       $(awards).children().each(function(i){
         var awards_class = $(this).attr('class')
@@ -327,8 +327,8 @@ $(document).ready(function(){
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \\section{Societies}
-\\begin{tabular}{rll}
 
+\\begin{tabular}{rll}
 `
       $(societies).children().each(function(i){
         var societies_class = $(this).attr('class')
@@ -397,7 +397,7 @@ $(document).ready(function(){
   $("#add_links").on('click', function(){
     $("#links_section").append("<div class='links_form' style='margin-top: 10px'>"+
       "<input class='form-control link_website_input' placeholder='Website Name'></input>"+
-      "<input class='form-control link_url_input' placeholder='URL'></input>"+
+      "<input class='form-control link_url_input' placeholder='URL (full path)'></input>"+
       "<input class='form-control link_description_input' placeholder='Description'></input>"+
     "</div>")
   });

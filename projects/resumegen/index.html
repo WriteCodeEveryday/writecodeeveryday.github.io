@@ -1,0 +1,110 @@
+<html>
+  <head>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-steps/1.1.0/jquery.steps.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.6.1/clipboard.min.js"></script>
+    <script src="index.js"></script>
+    <link href="index.css" rel="stylesheet">
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  </head>
+
+  <body>
+    <form id="resume_gen">
+      <h3>Landing Section</h3>
+      <section style="margin-left:auto; margin-right:auto">
+        <h3>Landing Section</h3>
+        This project is the result of a couple of hours of Javascript. </br>
+        This generates a simple LaTeX resume for Overleaf. </br>
+        Use at your own risk, I'm responsible for nothing and good luck. </br></br></br>
+
+        <div style="margin-left: 5%">
+          Powered by
+          <ul>
+            <li><a href="https://jquery.com/">jQuery</a></li>
+            <li><a href="http://www.jquery-steps.com">jQuery-Steps</a></li>
+            <li><a href="https://www.getbootstrap.com">Boostrap</a></li>
+            <li><a href="https://clipboardjs.com/">Clipboard.js</a></li>
+            <li><a href="https://www.overleaf.com/latex/templates/deedy-resume/sqdbztjjghvz">Deedy Resume</a> from Debarghya Das</li>
+          </ul>
+        </div>
+      </section>
+      <h3>Personal Section</h3>
+      <section>
+        <h3>Personal Section</h3>
+        <label for="name"></label>
+        <input id="name" type="text" placeholder="Name" class="form-control"></input>
+
+        <label for="website"></label>
+        <input id="website" type="text" placeholder="Website (Optional)" class="form-control"></input>
+
+        <label for="email"></label>
+        <input id="email" type="text" placeholder="Email (Optional)" class="form-control"></input>
+
+        <label for="phone"></label>
+        <input id="phone" type="text" placeholder="Phone (Optional)" class="form-control"></input>
+      </section>
+      <h3>Education Section</h3>
+      <section>
+        <h3>Education Section</h3>
+        <a class="btn btn-success form-control" id="add_education">Add Education</a>
+        <div id="education_section"></div>
+      </section>
+      <h3>Links Section</h3>
+      <section>
+        <h3>Links Section</h3>
+        <a class="btn btn-success form-control" id="add_links">Add Links</a>
+        <div id="links_section"></div>
+      </section>
+      <h3>Coursework</h3>
+      <section>
+        <h3>Coursework</h3>
+        <a class="btn btn-success form-control" id="add_coursework">Add Coursework</a>
+        <div id="coursework_section"></div>
+      </section>
+      <h3>Skills</h3>
+      <section>
+        <h3>Skills</h3>
+        <a class="btn btn-success form-control" id="add_skills">Add Skills</a>
+        <div id="skills_section"></div>
+      </section>
+      <h3>Experience / Research</h3>
+      <section>
+        <h3>Experience / Research</h3>
+        <a class="btn btn-success form-control" id="add_research">Add Research</a>
+        <div id="research_section"></div>
+        <a class="btn btn-success form-control" id="add_experience" style='margin-top: 10px'>Add Experience</a>
+        <div id="experience_section"></div>
+      </section>
+      <h3>Awards / Societies</h3>
+      <section>
+        <h3>Awards / Societies</h3>
+        <a class="btn btn-success form-control" id="add_awards">Add Awards</a>
+        <div id="awards_section"></div>
+        <a class="btn btn-success form-control" id="add_societies" style='margin-top: 10px'>Add Societies</a>
+        <div id="societies_section"></div>
+      </section>
+      <h3>Output</h3>
+      <section>
+        <h3>Output</h3>
+        <a class="btn btn-success form-control" style='margin-bottom: 10px' id="copy_resume">Copy resume to clipboard</a></br>
+        <ol>
+          <li>Open this link to the <a href="https://www.overleaf.com/8936486yktqjpdsqckk">Deedy Resume</a>.</li>
+          <li>Click the "Open As Template" button.</li>
+          <li>Paste into the "Source" section.</li>
+          <li>Click the "PDF" button.</li>
+        </ol>
+
+        <h3 style='margin-top: 3em'>FAQ</h3>
+        <strong>Can I use this for "insert reason"?</strong>
+        <p>I don't care</p>
+
+        <strong>Can I make money from this?</strong>
+        <p>I still don't care</p>
+
+        <strong>What's the license?</strong>
+        <p>Credit me if you're making money. </br>
+        Respect Apache V2 for the Deedy Template.</p>
+      </section>
+    </form>
+  </body>
+</html>

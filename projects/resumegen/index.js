@@ -51,12 +51,12 @@ $(document).ready(function(){
 
     if (email != ""){
       //console.log("Email: " + email)
-      resume += "\\href{mailto:" + email + "}{" + email + "} |\n"
+      resume += "\\href{mailto:" + email + "}{" + email + "} "
     }
 
     if (phone != ""){
       //console.log("Phone: " + phone)
-      resume += phone
+      resume += "|\n"+phone
     }
     resume += "}\n"
 
@@ -352,15 +352,13 @@ $(document).ready(function(){
     resume += `\\end{minipage}
 \\end{document}  \\documentclass[]{article}`
 
-
-    console.log("In Case Of An Error, The Following Is Your RESUME")
-    console.log("%%%%%%%%%%%RESUME_START%%%%%%%%%%%\n")
-    console.log(resume)
-    console.log("%%%%%%%%%%%RESUME_END%%%%%%%%%%%\n")
-
-    //Store this into the clipboard button
-    $("#copy_resume").attr('data-clipboard-text', resume)
-    new Clipboard('#copy_resume');
+    try {
+      //Store this into the clipboard button
+      $("#copy_resume").attr('data-clipboard-text', resume)
+      new Clipboard('#copy_resume');
+    } catch (e){
+      console.log("There was an error. Your resume is below.%%%%%%%%%%%RESUME_START%%%%%%%%%%%\n" + resume + "%%%%%%%%%%%RESUME_END%%%%%%%%%%%\n")
+    }
   }
 
   $('body').on('input', 'input', function(){

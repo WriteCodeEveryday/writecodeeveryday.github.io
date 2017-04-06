@@ -6,15 +6,82 @@
     <script src="index.js"></script>
     <link href="index.css" rel="stylesheet">
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <script type="text/javascript" src="//platform.linkedin.com/in.js">
+      api_key: 78vtr5naz4gt3o
+      authorize: false
+      onLoad: onLinkedInLoad
+    </script>
+
+    <script type="text/javascript">
+    // Setup an event listener to make an API call once auth is complete
+    function onLinkedInLoad() {
+      IN.Event.on(IN, "auth", getProfileData);
+    }
+
+    // Handle the successful return from the API call
+    function onSuccess(data) {
+      //console.log(data);
+      $("#name").val(data.firstName + " " + data.lastName);
+      $("#website").val(data.publicProfileUrl);
+      $("#email").val(data.emailAddress);
+
+      if (data.positions != undefined && data.positions.values != undefined){
+        var current_pos = data.positions.values
+        for (var i = (current_pos.length - 1); i > -1; i-- ){
+          $("#add_experience").trigger('click');
+          var experience = $(".experience_form:last")
+
+          var experience_company = current_pos[i].company.name
+          var experience_title = current_pos[i].title
+          var experience_date = current_pos[i].startDate.month + "/" + current_pos[i].startDate.year + " - "
+          if (!current_pos[i].isCurrent){
+            experience_date += current_pos[i].endDate.month + "/" + current_pos[i].endDate.year
+          } else {
+            experience_date += "Current"
+          }
+          var experience_location = current_pos[i].location.name
+
+          $(experience).children().each(function(i){
+            var experience_class = $(this).attr('class')
+            if (experience_class.indexOf('experience_company') > 0) {
+              $(this).val(experience_company)
+            } else if (experience_class.indexOf('experience_title') > 0) {
+              $(this).val(experience_title)
+            } else if (experience_class.indexOf('experience_date') > 0) {
+              $(this).val(experience_date)
+            } else if (experience_class.indexOf('experience_location') > 0) {
+              $(this).val(experience_location)
+            }
+          });
+        }
+
+        var experience_info = $('.steps ul li')[2]
+        $(experience_info).removeClass('disabled')
+        $(experience_info).addClass('done')
+      }
+    }
+
+    // Handle an error response from the API call
+    function onError(error) {
+      console.log(error);
+    }
+
+    // Use the API call wrapper to request the member's basic profile data
+    function getProfileData() {
+      IN.API.Raw("/people/~:(first-name,last-name,public-profile-url,email-address,positions)").result(onSuccess).error(onError);
+    }
+    </script>
   </head>
 
   <body>
     <form id="resume_gen">
-      <h3>Landing Section</h3>
+      <h3>Landing</h3>
       <section style="margin-left:auto; margin-right:auto">
-        <h3>Landing Section</h3>
+        <h3>Landing</h3>
         This project is the result of a couple of hours of Javascript. </br>
         This generates a simple LaTeX resume for Overleaf. </br>
+        Sign in with LinkedIn functionality is in testing. </br>
         Use at your own risk, I'm responsible for nothing and good luck. </br></br></br>
 
         <div style="margin-left: 5%">
@@ -28,9 +95,11 @@
           </ul>
         </div>
       </section>
-      <h3>Personal Section</h3>
+      <h3>Personal Info</h3>
       <section>
-        <h3>Personal Section</h3>
+        <h3>Personal Info</h3>
+        <script type="in/Login"></script>
+
         <label for="name"></label>
         <input id="name" type="text" placeholder="Name" class="form-control"></input>
 
@@ -43,30 +112,6 @@
         <label for="phone"></label>
         <input id="phone" type="text" placeholder="Phone (Optional)" class="form-control"></input>
       </section>
-      <h3>Education Section</h3>
-      <section>
-        <h3>Education Section</h3>
-        <a class="btn btn-success form-control" id="add_education">Add Education</a>
-        <div id="education_section"></div>
-      </section>
-      <h3>Links Section</h3>
-      <section>
-        <h3>Links Section</h3>
-        <a class="btn btn-success form-control" id="add_links">Add Links</a>
-        <div id="links_section"></div>
-      </section>
-      <h3>Coursework</h3>
-      <section>
-        <h3>Coursework</h3>
-        <a class="btn btn-success form-control" id="add_coursework">Add Coursework</a>
-        <div id="coursework_section"></div>
-      </section>
-      <h3>Skills</h3>
-      <section>
-        <h3>Skills</h3>
-        <a class="btn btn-success form-control" id="add_skills">Add Skills</a>
-        <div id="skills_section"></div>
-      </section>
       <h3>Experience / Research</h3>
       <section>
         <h3>Experience / Research</h3>
@@ -74,6 +119,30 @@
         <div id="research_section"></div>
         <a class="btn btn-success form-control" id="add_experience" style='margin-top: 10px'>Add Experience</a>
         <div id="experience_section"></div>
+      </section>
+      <h3>Skills</h3>
+      <section>
+        <h3>Skills</h3>
+        <a class="btn btn-success form-control" id="add_skills">Add Skills</a>
+        <div id="skills_section"></div>
+      </section>
+      <h3>Education</h3>
+      <section>
+        <h3>Education</h3>
+        <a class="btn btn-success form-control" id="add_education">Add Education</a>
+        <div id="education_section"></div>
+      </section>
+      <h3>Coursework</h3>
+      <section>
+        <h3>Coursework</h3>
+        <a class="btn btn-success form-control" id="add_coursework">Add Coursework</a>
+        <div id="coursework_section"></div>
+      </section>
+      <h3>Links</h3>
+      <section>
+        <h3>Links</h3>
+        <a class="btn btn-success form-control" id="add_links">Add Links</a>
+        <div id="links_section"></div>
       </section>
       <h3>Awards / Societies</h3>
       <section>

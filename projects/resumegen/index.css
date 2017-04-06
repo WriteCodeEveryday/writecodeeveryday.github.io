@@ -2,6 +2,12 @@
     Common
 */
 
+.IN-widget
+{
+  float:right;
+  margin-top: -35px;
+}
+
 .wizard,
 .tabcontrol
 {

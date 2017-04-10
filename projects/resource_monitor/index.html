@@ -32,7 +32,7 @@
 
 irb> ResourceMonitor.benchmark</textarea>
 </p>
-        <p>Install the dashboard <input readonly value="rake resource_monitor:install_dashboard" class="form-control"></input></p>
+        <p>Add the following to the top of your routes <input readonly value="mount ResourceMonitor::Engine => '/resources'" class="form-control"></input></p>
         <p>Add the following at the top of your application.rb
           <textarea readonly class="form-control" rows=6>before_action :resource_monitor_app
 after_action :resource_monitor_app
@@ -41,8 +41,7 @@ def resource_monitor_app
     ResourceMonitor.benchmark(self)
 end</textarea>
         </p>
-        <p>(Optional, I hope) Uninstall the dashboard <input readonly value="rake resource_monitor:uninstall_dashboard" class="form-control"></input></p>
-        <p>The following wizards were a great help when setting up a test app: <a href="https://www.reddit.com/r/rails/comments/64bnm9/heroku_help_with_my_gem/dg1b8l7/">/r/backwood_redneck</a>, <a href="https://github.com/greboide">greboide</a></p>
+        <p>The following wizards were a great help when setting up a test app: <a href="https://www.reddit.com/r/rails/comments/64bnm9/heroku_help_with_my_gem/dg1b8l7/">/r/backwood_redneck</a>, <a href="https://www.reddit.com/r/rails/comments/64bnm9/heroku_help_with_my_gem/dg1xglo/?context=3#dg201n6">/r/inflx</a>, <a href="https://github.com/greboide">greboide</a></p>
       </div>
     </div>
   </body>

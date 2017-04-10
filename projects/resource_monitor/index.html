@@ -27,11 +27,11 @@
         <h3>Installation</h3>
         <p>Add the Gem to your Gemfile <input readonly value="gem 'resource_monitor'" class="form-control"></input></p>
         <p>Install the gem <input readonly value="bundle install" class="form-control"></input></p>
-        <p>(Optional) Test the gem in your console
+        <!-- <p>(Optional) Test the gem in your console
           <textarea readonly class="form-control" rows=3>rake resource_monitor:console
 
 irb> ResourceMonitor.benchmark</textarea>
-</p>
+</p> -->
         <p>Add the following to the top of your routes <input readonly value="mount ResourceMonitor::Engine => '/resources'" class="form-control"></input></p>
         <p>Add the following at the top of your application.rb
           <textarea readonly class="form-control" rows=6>before_action :resource_monitor_app
